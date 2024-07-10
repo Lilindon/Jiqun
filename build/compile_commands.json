@@ -1,0 +1,52 @@
+[
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/chatserver.cpp.o -c /data/Muduo/Jiqun/src/server/chatserver.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/chatserver.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/chatservice.cpp.o -c /data/Muduo/Jiqun/src/server/chatservice.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/chatservice.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/main.cpp.o -c /data/Muduo/Jiqun/src/server/main.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/main.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/db/mydb.cpp.o -c /data/Muduo/Jiqun/src/server/db/mydb.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/db/mydb.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/model/friendmodel.cpp.o -c /data/Muduo/Jiqun/src/server/model/friendmodel.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/model/friendmodel.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/model/groupmodel.cpp.o -c /data/Muduo/Jiqun/src/server/model/groupmodel.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/model/groupmodel.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/model/offlinemessagemodle.cpp.o -c /data/Muduo/Jiqun/src/server/model/offlinemessagemodle.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/model/offlinemessagemodle.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/model/usermodel.cpp.o -c /data/Muduo/Jiqun/src/server/model/usermodel.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/model/usermodel.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/server",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty  -g -g   -o CMakeFiles/ChatServer.dir/redis/redis.cpp.o -c /data/Muduo/Jiqun/src/server/redis/redis.cpp",
+  "file": "/data/Muduo/Jiqun/src/server/redis/redis.cpp"
+},
+{
+  "directory": "/data/Muduo/Jiqun/build/src/client",
+  "command": "/usr/bin/g++   -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty -I/data/Muduo/Jiqun  -g -g   -o CMakeFiles/ChatClient.dir/main.cpp.o -c /data/Muduo/Jiqun/src/client/main.cpp",
+  "file": "/data/Muduo/Jiqun/src/client/main.cpp"
+}
+]

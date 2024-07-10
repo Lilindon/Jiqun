@@ -1,0 +1,9 @@
+[
+    {"msgId":1,"id":13,"name":"zhang san","password":"123456"},
+    {"msgId":1,"id":2,"name":"zhang san","password":"1234"},
+    {"msgId":5,"id":2,"name":"zhang san","toId":1,"msg":"hello li zhihao"},
+    {"msgId":5,"id":1,"name":"li zhihao","toId":2,"msg":"nihao zhang san"},
+    {"msgId":6,"userid":1,"friendid":2}
+    
+]
+
