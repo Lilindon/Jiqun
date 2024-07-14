@@ -11,6 +11,7 @@
 #include "offlinemessagemodel.hpp"
 #include "friendmodel.hpp"
 #include "groupmodel.hpp"
+#include "redis.hpp"
 
 using namespace std;
 using namespace muduo;
@@ -28,6 +29,8 @@ class ChatService
 public:
     // 处理登陆业务
     void login(const TcpConnectionPtr &conn, json &js, Timestamp time);
+    // 处理注销业务
+    void loginOut(const TcpConnectionPtr &conn, json &js, Timestamp time);
     // 处理注册业务
     void registe(const TcpConnectionPtr &conn, json &js, Timestamp time);
     
@@ -48,6 +51,7 @@ public:
     // 群组聊天业务
     void groupChat(const TcpConnectionPtr &conn, json &js, Timestamp time);
 
+    void handleRedisSubscribeMessage(int userid, string msg);
     // 获取单例对象的接口函数
     static ChatService* instance();
 
@@ -76,6 +80,8 @@ private:
     // 组类对象
     GroupModel _groupModel;
 
+    // Redis操作对象
+    Redis _redis;
 };
 
 #endif

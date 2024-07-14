@@ -1,10 +1,10 @@
 #include "chatserver.hpp"
 #include "chatservice.hpp"
 #include "json.hpp"
+
 #include <functional>
 #include <string>
 #include <iostream>
-
 using namespace std;
 using namespace std::placeholders;
 using json = nlohmann::json;
@@ -48,7 +48,8 @@ void ChatServer::onMessage(const TcpConnectionPtr& conn,
                             Timestamp time)
 {
     string buf = buffer->retrieveAllAsString();
-
+    // 测试，添加json打印代码
+    cout << buf << endl;
     // 数据反序列化
     json js = json::parse(buf);
     

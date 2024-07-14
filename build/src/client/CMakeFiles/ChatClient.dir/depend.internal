@@ -3,8 +3,8 @@
 
 src/client/CMakeFiles/ChatClient.dir/main.cpp.o
  ../include/public.hpp
- ../include/server/group.hpp
- ../include/server/groupuser.hpp
- ../include/server/user.hpp
+ ../include/server/model/group.hpp
+ ../include/server/model/groupuser.hpp
+ ../include/server/model/user.hpp
  ../thirdparty/json.hpp
  /data/Muduo/Jiqun/src/client/main.cpp

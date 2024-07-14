@@ -6,7 +6,6 @@
 #include <thread>
 using namespace std;
 class Redis{
-
 public:
     Redis();
     ~Redis();
@@ -24,10 +23,10 @@ public:
     void init_notify_handler(function<void(int, string)> fn);
 
 private:
-    // publish 上下文
+    // publish 上下文（客户端存储与连接相关的所有信息）
     redisContext *_publish_context;
-    // subscribe 上下文
+    // subscribe 上下文（客户端存储与连接相关的所有信息）
     redisContext *_subscribe_context;
-    // 事件回调，收到订阅消息，给service层 上报
+    // 事件回调，收到订阅消息，给ChatServer回调 service层 上报
     function<void(int, string)> _notify_message_handler;
 };

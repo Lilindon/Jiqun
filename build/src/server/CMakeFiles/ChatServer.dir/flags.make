@@ -6,5 +6,5 @@ CXX_FLAGS = -g -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/thirdparty 
+CXX_INCLUDES = -I/data/Muduo/Jiqun/include -I/data/Muduo/Jiqun/include/server -I/data/Muduo/Jiqun/include/server/db -I/data/Muduo/Jiqun/include/server/model -I/data/Muduo/Jiqun/include/server/redis -I/data/Muduo/Jiqun/thirdparty 
 

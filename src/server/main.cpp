@@ -11,13 +11,37 @@ void resetHandler(int){
     exit(0);
 }
 
-int main()
+// int main()
+// {
+//     signal(SIGINT, resetHandler); // 服务器 ctrl+c 异常终止后 将 online 变为 offline
+//     muduo::net::EventLoop loop; // epoll
+//     muduo::net::InetAddress addr("127.0.0.1", 6000);
+//     ChatServer server(&loop, addr, "Name::ChatServer");
+//     server.start(); // listenfd  epoll_ctl => epoll
+//     loop.loop(); // epoll_wait 以阻塞方式等待新用户连接、或已连接用户读写事件
+//     return 0; 
+// }
+
+int main(int argc, char **argv)
 {
-    signal(SIGINT, resetHandler); // 服务器 ctrl+c 异常终止后 将 online 变为 offline
-    muduo::net::EventLoop loop; // epoll
-    muduo::net::InetAddress addr("127.0.0.1", 6000);
-    ChatServer server(&loop, addr, "Name::ChatServer");
-    server.start(); // listenfd  epoll_ctl => epoll
-    loop.loop(); // epoll_wait 以阻塞方式等待新用户连接、或已连接用户读写事件
-    return 0; 
+    if (argc < 3)
+    {
+        cerr << "command invalid! example: ./ChatServer 127.0.0.1 6000" << endl;
+        exit(-1);
+    }
+
+    // 解析通过命令行参数传递的ip和port
+    char *ip = argv[1];
+    uint16_t port = atoi(argv[2]);
+
+    signal(SIGINT, resetHandler);
+
+    EventLoop loop;
+    InetAddress addr(ip, port);
+    ChatServer server(&loop, addr, "ChatServer");
+
+    server.start();
+    loop.loop();
+
+    return 0;
 }

@@ -7,6 +7,9 @@ using namespace std;
 
 // User表的 数据操作类 UserModel 给外界提供的是对象 而非数据库字段
 
+
+
+
 // User表的增加方法
 bool UserModel::insert(User &user){
     // 1.组装sql语句

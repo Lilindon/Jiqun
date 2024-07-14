@@ -8,19 +8,19 @@
 
 ../include/public.hpp
 
-../include/server/group.hpp
+../include/server/model/group.hpp
 groupuser.hpp
-../include/server/groupuser.hpp
+../include/server/model/groupuser.hpp
 string
 -
 vector
 -
 
-../include/server/groupuser.hpp
+../include/server/model/groupuser.hpp
 user.hpp
-../include/server/user.hpp
+../include/server/model/user.hpp
 
-../include/server/user.hpp
+../include/server/model/user.hpp
 string
 -
 

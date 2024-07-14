@@ -2,9 +2,9 @@
 #include <muduo/base/Logging.h>
 
 static string server = "127.0.0.1";
-static string user = "root";
+static string user = "deku";
 static string password = "123456";
-static string dname = "user";
+static string dname = "chat";  // database name
 
 // 初始化数据库连接 创建mysql连接的内存空间
 MySQL::MySQL(){

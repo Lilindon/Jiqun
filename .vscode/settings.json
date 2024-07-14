@@ -123,7 +123,10 @@
     "typeindex": "cpp",
     "list": "cpp",
     "codecvt": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "bitset": "cpp",
+    "set": "cpp",
+    "fstream": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

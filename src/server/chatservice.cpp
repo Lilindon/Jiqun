@@ -29,10 +29,12 @@ ChatService::ChatService()
     _msgHandlerMap.insert({ADD_FRIEND_MSG, std::bind(&ChatService::addFriend, this, _1, _2, _3)});
     // 创建群组
     _msgHandlerMap.insert({CREATE_GROUP_MSG, std::bind(&ChatService::createGroup, this, _1, _2, _3)});
-    // _msgHandlerMap.insert({CREATE_GROUP_MSG, std::bind(&ChatService::createGroup, this, _1, _2, _3)});
-    // _msgHandlerMap.insert({CREATE_GROUP_MSG, std::bind(&ChatService::createGroup, this, _1, _2, _3)});
+    // 连接redis server
+    if(_redis.connect()){
+        // 设置上报消息的回调
+        _redis.init_notify_handler(std::bind(&ChatService::handleRedisSubscribeMessage, this, _1, _2));
+    }
 }
-
 
 // 获取消息对应的处理器
 MsgHandler ChatService::getHandler(int msgId)
@@ -53,11 +55,12 @@ MsgHandler ChatService::getHandler(int msgId)
     }
 }
 
-// 处理登陆业务   ORM  object relation map  对象关系映射  业务层操作的都是对象   业务模块  数据模块  解耦
+// 处理登陆业务  ORM  object relation map  对象关系映射  业务层操作的都是对象   业务模块  数据模块  解耦
 void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
 {
     int id = js["id"].get<int>(); // 当id作为主键时，进行的操作
     string password = js["password"];
+    LOG_ERROR << "id = " << id << " password = " << password;
 
     User user = _userModel.query(id);
     if(user.getId() == id && user.getPwd() == password){
@@ -76,7 +79,10 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
                 _userConnMap.insert({user.getId(), conn});
             }
 
-             // 更新用户登陆状态 state:: offline->online
+            // 登陆成功后，想redis订阅channel(id);
+            _redis.subscribe(id);
+
+            // 更新用户登陆状态 state:: offline->online
             user.setState("online"); 
             _userModel.updateState(user); // _userModel处理数据库
 
@@ -121,6 +127,60 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
     }
 }
 
+// 客户退出
+void ChatService::loginOut(const TcpConnectionPtr &conn, json &js, Timestamp time){
+    int userid = js["id"].get<int>();
+
+    {
+        lock_guard<mutex> lock(_connMutex);
+        auto it = _userConnMap.find(userid);
+        if(it != _userConnMap.end()){
+            _userConnMap.erase(it);
+        }
+    }
+
+    // redis中取消订阅通道
+    _redis.unsubscribe(userid);
+    // 更新用户的状态信息
+    User user(userid, "", "", "offline");
+    _userModel.updateState(user);
+}
+
+// 处理客户端异常退出
+void ChatService::clientCloseException(const TcpConnectionPtr &conn)
+{
+    User user;
+    // 处理异常退出之前，保证_userConnMap的线程安全问题 同时处理异常与login时的map
+    {
+        lock_guard<mutex> lock(_connMutex);
+        for(auto it=_userConnMap.begin(); it!=_userConnMap.end(); ++it)
+        {
+            if(it->second == conn) // 查询到conn的智能指针
+            {
+                // 从unordered_map<int, conn>删除连接对
+                user.setId(it->first);
+                _userConnMap.erase(it);
+                break;
+            }
+        }
+    }
+
+    // 异常退出 对Redis取消订阅通道
+    _redis.unsubscribe(user.getId());
+
+    if(user.getId() != -1){  // 若为-1 则该id的用户不存在
+        // 更新用户状态信息
+        user.setState("offline");
+        _userModel.updateState(user); // 数据库修改_userModel
+    }
+}
+
+// 服务器异常，业务重置方法
+void ChatService::reset(){
+    // 数据库操作类usermodel把online状态的用户，设置成offline
+    _userModel.resetState();
+}
+
 // 处理注册业务 反序列化json文件中的 name password
 void ChatService::registe(const TcpConnectionPtr &conn, json &js, Timestamp)
 {
@@ -151,37 +211,6 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js, Timestamp)
     }
 }
 
-// 处理客户端异常退出
-void ChatService::clientCloseException(const TcpConnectionPtr &conn)
-{
-    User user;
-    // 处理异常退出之前，保证_userConnMap的线程安全问题 同时处理异常与login时的map
-    {
-        lock_guard<mutex> lock(_connMutex);
-        for(auto it=_userConnMap.begin(); it!=_userConnMap.end(); ++it)
-        {
-            if(it->second == conn) // 查询到conn的智能指针
-            {
-                // 从unordered_map<int, conn>删除连接对
-                user.setId(it->first);
-                _userConnMap.erase(it);
-                break;
-            }
-        }
-    }
-    if(user.getId() != -1){  // 若为-1 则该id的用户不存在
-        // 更新用户状态信息
-        user.setState("offline");
-        _userModel.updateState(user); // 数据库修改_userModel
-    }
-}
-
-// 服务器异常，业务重置方法
-void ChatService::reset(){
-    // 数据库操作类usermodel把online状态的用户，设置成offline
-    _userModel.resetState();
-}
-
 // 一对一聊天业务
 void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time){
     int toId = js["toid"].get<int>();
@@ -197,6 +226,14 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time
             return;
         }
     }
+
+    // 数据库查看toid是否在线  可能在其他服务器中登陆
+    User user = _userModel.query(toId);
+    if(user.getState() == "online"){
+        _redis.publish(toId, js.dump());
+        return;
+    }
+    
     // toId 不在线 存储离线消息   离线消息表：offlineMsgModel  将离线消息存储到数据库中
     _offlineMsgModel.insert(toId, js.dump());
 }
@@ -215,12 +252,17 @@ void ChatService::groupChat(const TcpConnectionPtr &conn, json &js, Timestamp ti
             // 若该用户在线则直接转发消息
             it->second->send(js.dump());
         }else{
-            // 若该用户不在线 则存储离线消息
-            _offlineMsgModel.insert(id, js.dump());
+            // 数据库中查看是否在其他服务器中在线
+            User user = _userModel.query(id);
+            if(user.getState() == "online"){
+                _redis.publish(id, js.dump());
+            }else{
+                // 若该用户不在线 则存储离线消息
+                _offlineMsgModel.insert(id, js.dump());
+            }    
         }
     }
 }
-
 
 // 添加好友业务
 void ChatService::addFriend(const TcpConnectionPtr &conn, json &js, Timestamp time){
@@ -253,4 +295,14 @@ void ChatService::addGroup(const TcpConnectionPtr &conn, json &js, Timestamp tim
     _groupModel.addGroup(userid, groupid, "normal");
 }
 
-
+// 
+void ChatService::handleRedisSubscribeMessage(int userid, string msg){
+    lock_guard<mutex> lock(_connMutex);
+    auto it = _userConnMap.find(userid); // 根据用户id查找到对应的TcpConnectionPtr
+    if(it != _userConnMap.end()){ // 找到 则发送
+        it->second->send(msg);
+        return;
+    }
+    // 存储离线消息
+    _offlineMsgModel.insert(userid, msg);
+}
