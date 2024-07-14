@@ -2,14 +2,14 @@
 技术栈：nginx | redis | muduo | mysql
 工作在linux环境下的nginx tcp负载均衡的集群聊天服务器及客户端源码
 
-# Tips：
-1> cd ./bulid
-2> rm -rf *
-3> cmake ..
-4> make
-5> cd ../bin
-6> ./ChatServer
-7> ./ChatClient
+# Tips：  
+1> cd ./bulid  
+2> rm -rf *  
+3> cmake ..  
+4> make  
+5> cd ../bin  
+6> ./ChatServer  
+7> ./ChatClient  
 
 # Git
 查看当前绑定的远程仓库
