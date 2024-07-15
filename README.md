@@ -2,6 +2,10 @@
 技术栈：nginx | redis | muduo | mysql  
 工作在linux环境下的nginx tcp负载均衡的集群聊天服务器及客户端源码
 
+# Depends  
+mysql> sudo apt install mysql-server  
+mysql> sudo apt install libmysqlclient-dev  
+
 # Tips：  
 1> cd ./bulid  
 2> rm -rf *  
